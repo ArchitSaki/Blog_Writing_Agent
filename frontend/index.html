@@ -1,21 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>AI Agent</title>
+  <title>AI Agent (State Machine)</title>
 </head>
 
 <body>
 
-<h2>AI Agent Demo</h2>
+<h2>AI Blog Agent (Controlled State Machine)</h2>
 
-<select id="mode">
-  <option value="state">Controlled Agent</option>
-  <option value="prompt">Prompt Agent</option>
-</select>
+<br>
 
-<br><br>
-
-<div id="chat" style="border:1px solid black; height:300px; overflow:auto;"></div>
+<div id="chat" style="border:1px solid black; height:300px; overflow:auto; padding:10px;"></div>
 
 <br>
 
@@ -23,9 +18,11 @@
 <button onclick="send()">Send</button>
 
 <script>
+
 async function send() {
   let input = document.getElementById("input").value;
-  let mode = document.getElementById("mode").value;
+
+  if (!input) return;
 
   addMessage("You: " + input);
 
@@ -33,8 +30,7 @@ async function send() {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({
-      message: input,
-      mode: mode
+      message: input
     })
   });
 
@@ -47,7 +43,9 @@ async function send() {
 function addMessage(msg) {
   let chat = document.getElementById("chat");
   chat.innerHTML += "<p>" + msg + "</p>";
+  chat.scrollTop = chat.scrollHeight;
 }
+
 </script>
 
 </body>

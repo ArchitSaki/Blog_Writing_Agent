@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from groq import Groq
+import os
 
 app = FastAPI()
 
@@ -14,8 +15,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 🔑 Add your Groq API key here
-client = Groq(api_key="your_groq_api_key")
+
+
+client = Groq(api_key="your_api_key")
 
 # -------- STATE MACHINE APPROACH --------
 state = {
@@ -27,19 +29,14 @@ state = {
 
 class Message(BaseModel):
     message: str
-    mode: str   # "state" or "prompt"
 
 
 @app.post("/agent")
 def agent(msg: Message):
     
-    if msg.mode == "state":
-        return state_machine(msg.message)
-    else:
-        return prompt_agent(msg.message)
+    return state_machine(msg.message)
+    
 
-
-# -------- APPROACH 1: CONTROLLED AGENT --------
 def state_machine(user_input):
 
     if state["step"] == 0:
@@ -65,27 +62,6 @@ def state_machine(user_input):
         return {"reply": blog}
 
 
-# -------- APPROACH 2: PROMPT AGENT --------
-def prompt_agent(user_input):
-
-    response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
-        messages=[
-            {
-                "role": "system",
-                "content": "You are an AI agent. Ask questions if needed, then generate a blog."
-            },
-            {
-                "role": "user",
-                "content": user_input
-            }
-        ]
-    )
-
-    return {"reply": response.choices[0].message.content}
-
-
-# -------- LLM GENERATION --------
 def generate_blog(task, tone, length):
 
     prompt = f"""
