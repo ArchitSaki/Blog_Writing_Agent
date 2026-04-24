@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI Agent</title>
+</head>
+
+<body>
+
+<h2>AI Agent Demo</h2>
+
+<select id="mode">
+  <option value="state">Controlled Agent</option>
+  <option value="prompt">Prompt Agent</option>
+</select>
+
+<br><br>
+
+<div id="chat" style="border:1px solid black; height:300px; overflow:auto;"></div>
+
+<br>
+
+<input id="input" placeholder="Type message..." />
+<button onclick="send()">Send</button>
+
+<script>
+async function send() {
+  let input = document.getElementById("input").value;
+  let mode = document.getElementById("mode").value;
+
+  addMessage("You: " + input);
+
+  let res = await fetch("http://localhost:8000/agent", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      message: input,
+      mode: mode
+    })
+  });
+
+  let data = await res.json();
+  addMessage("Bot: " + data.reply);
+
+  document.getElementById("input").value = "";
+}
+
+function addMessage(msg) {
+  let chat = document.getElementById("chat");
+  chat.innerHTML += "<p>" + msg + "</p>";
+}
+</script>
+
+</body>
+</html>
