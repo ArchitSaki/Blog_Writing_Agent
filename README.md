@@ -29,11 +29,24 @@ Here, instead of manually controlling the flow, different agents handle differen
 - Another agent generates the final blog
 - All agents work together like a team (crew)
 
-##how to run:-
-- for that first create a virtual environment and install all the dependencies i.e requirements.txt file in it.
-- then after that open the approach you want to test
-- if you selected the state based then go in backend folder on your terminal and execute it 
-- once the backend has started then open the html page and you are good to go...
+### Setup Instructions
+1. Clone the repository
+   git clone https://github.com/ArchitSaki/Blog_Writing_Agent
+2. Create virtual environment
+   python -m venv venv
+   source venv/bin/activate  # Windows: venv\Scripts\activate
+3. Install dependencies
+   pip install -r requirements.txt
+4. Set up API keys
+   - Get Groq API key from https://console.groq.com
+   - Create .env file in backend folder:
+     GROQ_API_KEY=your_key_here
+5. Run backend
+   cd backend
+   uvicorn main:app --reload
+6. Run frontend
+   Open frontend/index.html in browser
+
 
 ## 📌 Conclusion
 
