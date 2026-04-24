@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Blog Agent</title>
+</head>
+<body>
+
+    <h2>AI Blog Generator (Multi-Agent)</h2>
+
+    <input type="text" id="inputBox" placeholder="Enter your message" style="width:300px;" />
+    <button onclick="sendMessage()">Send</button>
+
+    <div id="chat" style="margin-top:20px;"></div>
+
+    <script>
+    async function sendMessage() {
+
+        let inputBox = document.getElementById("inputBox");
+        let chat = document.getElementById("chat");
+
+        let input = inputBox.value;
+
+        if (input === "") return;
+
+        // Show user message
+        chat.innerHTML += `<p><b>You:</b> ${input}</p>`;
+
+        // 🔥 Show loading message
+        let loadingId = "loading_" + Date.now();
+        chat.innerHTML += `<p id="${loadingId}"><b>AI:</b> Generating blog...</p>`;
+
+        try {
+            let response = await fetch("http://127.0.0.1:8000/crewai-agent", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ message: input })
+            });
+
+            let data = await response.json();
+
+            // 🔥 Replace loading with actual result
+            document.getElementById(loadingId).innerHTML =
+                `<b>AI:</b><br><pre style="white-space: pre-wrap;">${data.reply}</pre>`;
+
+        } catch (error) {
+            document.getElementById(loadingId).innerHTML =
+                "<b>AI:</b> Error connecting to server";
+        }
+
+        inputBox.value = "";
+    }
+</script>
+
+</body>
+</html>
