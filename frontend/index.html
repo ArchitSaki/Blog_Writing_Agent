@@ -1,1 +1,75 @@
-<!DOCTYPE html><html><head><title>Test- Agent - Workflow</title></head><body><h2>AI Blog Agent (Controlled State Machine)</h2><div id="chat" style="border:1px solid black; height:300px; overflow:auto; padding:10px;"></div><input id="input" placeholder="Type message..." /><button onclick="send()">Send</button><script>async function send() {let input = document.getElementById("input").value;if (!input) return;addMessage("You: " + input);let res = await fetch("http://localhost:8000/agent", {method: "POST",headers: {"Content-Type": "application/json"},body: JSON.stringify({message: input})});let data = await res.json();addMessage("Bot: " + data.reply);document.getElementById("input").value = "";}function addMessage(msg) {let chat = document.getElementById("chat");chat.innerHTML += "<p>" + msg + "</p>";chat.scrollTop = chat.scrollHeight;}</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test- Agent - Workflow</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      }
+      h2 {
+        text-align: center;
+        color: #333;
+      }
+      #chat {
+        border: 1px solid #ddd;
+        height: 300px;
+        overflow-y: auto;
+        padding: 10px;
+        margin-bottom: 10px;
+        background-color: #fafafa;
+        border-radius: 4px;
+      }
+      .message {
+        margin-bottom: 8px;
+        padding: 8px;
+        border-radius: 4px;
+      }
+      .user-message {
+        background-color: #e3f2fd;
+        text-align: right;
+      }
+      .bot-message {
+        background-color: #f1f8e9;
+        text-align: left;
+      }
+      .input-area {
+        display: flex;
+        gap: 10px;
+      }
+      input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      button {
+        padding: 10px 20px;
+        background-color: #1976d2;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #1565c0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
