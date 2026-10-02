@@ -5,7 +5,7 @@ from crewai import Agent, Task, Crew
 from langchain_groq import ChatGroq
 import os
 
-app = FastAPI()
+app = FastAPI(title="Symphony test")
 
 # -------- CORS FIX --------
 app.add_middleware(
